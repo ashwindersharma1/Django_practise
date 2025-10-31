@@ -1,0 +1,55 @@
+1. Installation of the virtual environment 
+    python -m venv venv
+
+2.  Install the dependencies of the python 
+  Then activate the virtual environment    
+    venv\Scripts\activate
+then run these commands in the terminal    
+    pip install django
+
+
+    python.exe -m pip install --upgrade pip
+
+    
+3. 
+django-admin startproject mysite
+cd mysite
+
+
+
+4.  To install the connector for the mysql database 
+        pip install mysqlclient   
+
+5. now you can start wiht the development 
+following notes will be  to the context  of the flow of the application 
+
+
+ Admin Entry using the PYTHON SHELL 
+
+        Steps below for the same . 
+            python manage.py shell
+            type below command to create the record 
+              
+                from accounts.models import User
+                from django.contrib.auth.hashers import make_password
+
+                user = User.objects.create(
+                    email='admin@gmail.com',
+                    name='Admin',
+                    password=make_password('Admin@123'),
+                    role='admin'
+                )
+                user.save()
+
+                from accounts.models import User
+                from django.contrib.auth.hashers import make_password
+                user = User.objects.create(
+                    email='user@gmail.com',
+                    name='User1',
+                    password=make_password('User@123'),
+                    role='user'
+                )
+                user.save()
+
+
+
