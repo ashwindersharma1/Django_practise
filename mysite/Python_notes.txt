@@ -49,5 +49,8 @@ password=make_password('User@123'),
 role='user')
 user.save()
 
+remove the cache files from the git  that are tracked by the git 
+    git rm --cached -r mysite/__pycache__/urls.cpython-313.pyc
 
+    
 
