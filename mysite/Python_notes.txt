@@ -30,26 +30,24 @@ following notes will be  to the context  of the flow of the application
             python manage.py shell
             type below command to create the record 
               
-                from accounts.models import User
-                from django.contrib.auth.hashers import make_password
+from accounts.models import User
+from django.contrib.auth.hashers import make_password
 
-                user = User.objects.create(
-                    email='admin@gmail.com',
-                    name='Admin',
-                    password=make_password('Admin@123'),
-                    role='admin'
-                )
-                user.save()
+user = User.objects.create(
+email='admin@gmail.com',
+name='Admin',
+password=make_password('Admin@123'),
+role='admin')
+user.save()
 
-                from accounts.models import User
-                from django.contrib.auth.hashers import make_password
-                user = User.objects.create(
-                    email='user@gmail.com',
-                    name='User1',
-                    password=make_password('User@123'),
-                    role='user'
-                )
-                user.save()
+from accounts.models import User
+from django.contrib.auth.hashers import make_password
+user = User.objects.create(
+email='user@gmail.com',
+name='User1',
+password=make_password('User@123'),
+role='user')
+user.save()
 
 
 
