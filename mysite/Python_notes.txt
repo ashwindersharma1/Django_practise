@@ -52,5 +52,6 @@ user.save()
 remove the cache files from the git  that are tracked by the git 
     git rm --cached -r mysite/__pycache__/urls.cpython-313.pyc
 
-    
-
+    git rm -r --cached accounts/__pycache__
+    git rm -r --cached accounts/migrations/__pycache__
+    git rm -r --cached mysite/__pycache__
