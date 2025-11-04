@@ -18,5 +18,6 @@ from django.urls import path,include
 from accounts.views import home
 
 urlpatterns = [
-    path('', include('accounts.urls'))
+    path('', include('accounts.urls')),
+    path('admin/', include('admin_panel.urls')),
 ]

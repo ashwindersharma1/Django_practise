@@ -38,6 +38,7 @@
             <hr>
             {% block sidebar %}
             <a href="#">Dashboard</a>
+            {% comment %} <a href="{% url 'view_campaigns' %}">Campaigns</a> {% endcomment %}
             <a href="#">Profile</a>
             <a href="#">Settings</a>
             <a href="{% url 'logout' %}">Logout</a>

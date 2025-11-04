@@ -23,12 +23,13 @@ cd mysite
 5. now you can start wiht the development 
 following notes will be  to the context  of the flow of the application 
 
-
+***//////////////////////////////////////////////
  Admin Entry using the PYTHON SHELL 
 
-        Steps below for the same . 
-            python manage.py shell
-            type below command to create the record 
+Steps below for the same . 
+    python manage.py shell
+
+ Type below command to create the record 
               
 from accounts.models import User
 from django.contrib.auth.hashers import make_password
@@ -48,10 +49,11 @@ name='User1',
 password=make_password('User@123'),
 role='user')
 user.save()
-
+***////////////////////////////////////////////////
 remove the cache files from the git  that are tracked by the git 
     git rm --cached -r mysite/__pycache__/urls.cpython-313.pyc
 
     git rm -r --cached accounts/__pycache__
     git rm -r --cached accounts/migrations/__pycache__
     git rm -r --cached mysite/__pycache__
+
