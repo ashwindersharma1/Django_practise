@@ -1,0 +1,110 @@
+{% extends "admin_panel/layout/base_dashboard.html" %}
+
+{% block title %} Dashboard{% endblock %}
+
+
+
+{% comment %} {% extends "base.html" %} {% endcomment %}
+
+
+{% block content %}
+<div class="container py-4">
+  <h2 class="fw-bold mb-1">Radio Stations</h2>
+  <p class="text-muted mb-4">Manage your radio station network</p>
+
+  <!-- Top Metrics -->
+  <div class="row g-3 mb-4">
+    <div class="col-md-4">
+      <div class="card shadow-sm border-0 rounded-4 p-3">
+        <h6 class="text-muted mb-1">Total Stations</h6>
+        <h3 class="fw-bold">{{ total_stations }}</h3>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card shadow-sm border-0 rounded-4 p-3">
+        <h6 class="text-muted mb-1">Active Stations</h6>
+        <h3 class="fw-bold text-primary">{{ active_stations }}</h3>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card shadow-sm border-0 rounded-4 p-3">
+        <h6 class="text-muted mb-1">Markets</h6>
+        <h3 class="fw-bold text-warning">{{ total_markets }}</h3>
+      </div>
+    </div>
+  </div>
+
+  <!-- Search and Filter -->
+  <div class="d-flex align-items-center mb-4 gap-2">
+    <input type="text" id="searchBox" class="form-control w-50" placeholder="Search Radio Stations..." />
+    <select id="statusFilter" class="form-select w-auto">
+      <option value="">All Status</option>
+      <option value="active">Active</option>
+      <option value="inactive">Inactive</option>
+    </select>
+    <a href="#" class="btn btn-primary ms-auto">+ Add Station</a>
+  </div>
+
+  <!-- Station List -->
+  <div class="card p-3 shadow-sm border-0 rounded-4">
+    <h5 class="fw-bold mb-3">All Radio Stations</h5>
+    <p class="text-muted">Manage and configure your radio station network</p>
+
+    {% for station in page_obj %}
+      <div class="d-flex justify-content-between align-items-center border-bottom py-3">
+        <div>
+          <h6 class="fw-bold mb-1">{{ station.name }}</h6>
+          {% if station.is_active %}
+            <span class="badge bg-success-subtle text-success border border-success-subtle">active</span>
+          {% else %}
+            <span class="badge bg-secondary">inactive</span>
+          {% endif %}
+          <p class="mb-0 mt-2 text-muted small">
+            👤 Owner: {{ station.owner|default:"N/A" }} |
+            🎵 {{ station.format.name|default:"N/A" }} |
+            📍 {{ station.market.name|default:"N/A" }}
+          </p>
+        </div>
+        <div>
+          <a href="#" class="btn btn-outline-primary btn-sm me-2">👁 View</a>
+          <a href="#" class="btn btn-outline-secondary btn-sm me-2">✏️ Edit</a>
+          <a href="#" class="btn btn-outline-danger btn-sm">🗑 Delete</a>
+        </div>
+      </div>
+    {% empty %}
+      <p class="text-muted text-center py-4">No stations found.</p>
+    {% endfor %}
+
+    <!-- Pagination -->
+    <div class="d-flex justify-content-center mt-4">
+      <nav>
+        <ul class="pagination">
+          {% if page_obj.has_previous %}
+            <li class="page-item"><a href="?page={{ page_obj.previous_page_number }}" class="page-link">&laquo;</a></li>
+          {% endif %}
+          {% for num in page_obj.paginator.page_range %}
+            <li class="page-item {% if page_obj.number == num %}active{% endif %}">
+              <a href="?page={{ num }}" class="page-link">{{ num }}</a>
+            </li>
+          {% endfor %}
+          {% if page_obj.has_next %}
+            <li class="page-item"><a href="?page={{ page_obj.next_page_number }}" class="page-link">&raquo;</a></li>
+          {% endif %}
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+{% comment %} <script src="{% static 'js/jquery.min.js' %}"></script> {% endcomment %}
+<script>
+  // (Later we can add AJAX-based pagination)
+  $('#searchBox').on('keyup', function() {
+    const query = $(this).val().toLowerCase();
+    $('.station-item').each(function() {
+      $(this).toggle($(this).text().toLowerCase().includes(query));
+    });
+  });
+</script>
+{% endblock %}
+
