@@ -1,6 +1,6 @@
 {% extends "admin_panel/layout/base_dashboard.html" %}
 
-{% block title %} Dashboard{% endblock %}
+{% comment %} {% block title %} Dashboard{% endblock %} {% endcomment %}
 
 
 
@@ -34,77 +34,40 @@
     </div>
   </div>
 
-  <!-- Search and Filter -->
-  <div class="d-flex align-items-center mb-4 gap-2">
-    <input type="text" id="searchBox" class="form-control w-50" placeholder="Search Radio Stations..." />
-    <select id="statusFilter" class="form-select w-auto">
-      <option value="">All Status</option>
-      <option value="active">Active</option>
-      <option value="inactive">Inactive</option>
-    </select>
-    <a href="#" class="btn btn-primary ms-auto">+ Add Station</a>
+
+
+  <div class="row mb-3">
+    <div class="col-md-8">
+      <input type="text" 
+             class="form-control" 
+             placeholder="Search Radio Stations..." 
+             name="q"
+             hx-get="{% url 'list_radio_stations' %}"
+             hx-trigger="keyup changed delay:500ms"
+             hx-target="#stations-list"
+             hx-push-url="true"
+             value="{{ query }}">
+    </div>
+    <div class="col-md-4">
+      <select class="form-select"
+              name="status"
+              hx-get="{% url 'list_radio_stations' %}"
+              hx-trigger="change"
+              hx-target="#stations-list"
+              hx-push-url="true">
+        <option value="">All Status</option>
+        <option value="active" {% if status_filter == 'active' %}selected{% endif %}>Active</option>
+        <option value="inactive" {% if status_filter == 'inactive' %}selected{% endif %}>Inactive</option>
+      </select>
+    </div>
   </div>
 
-  <!-- Station List -->
-  <div class="card p-3 shadow-sm border-0 rounded-4">
-    <h5 class="fw-bold mb-3">All Radio Stations</h5>
-    <p class="text-muted">Manage and configure your radio station network</p>
-
-    {% for station in page_obj %}
-      <div class="d-flex justify-content-between align-items-center border-bottom py-3">
-        <div>
-          <h6 class="fw-bold mb-1">{{ station.name }}</h6>
-          {% if station.is_active %}
-            <span class="badge bg-success-subtle text-success border border-success-subtle">active</span>
-          {% else %}
-            <span class="badge bg-secondary">inactive</span>
-          {% endif %}
-          <p class="mb-0 mt-2 text-muted small">
-            👤 Owner: {{ station.owner|default:"N/A" }} |
-            🎵 {{ station.format.name|default:"N/A" }} |
-            📍 {{ station.market.name|default:"N/A" }}
-          </p>
-        </div>
-        <div>
-          <a href="#" class="btn btn-outline-primary btn-sm me-2">👁 View</a>
-          <a href="#" class="btn btn-outline-secondary btn-sm me-2">✏️ Edit</a>
-          <a href="#" class="btn btn-outline-danger btn-sm">🗑 Delete</a>
-        </div>
-      </div>
-    {% empty %}
-      <p class="text-muted text-center py-4">No stations found.</p>
-    {% endfor %}
-
-    <!-- Pagination -->
-    <div class="d-flex justify-content-center mt-4">
-      <nav>
-        <ul class="pagination">
-          {% if page_obj.has_previous %}
-            <li class="page-item"><a href="?page={{ page_obj.previous_page_number }}" class="page-link">&laquo;</a></li>
-          {% endif %}
-          {% for num in page_obj.paginator.page_range %}
-            <li class="page-item {% if page_obj.number == num %}active{% endif %}">
-              <a href="?page={{ num }}" class="page-link">{{ num }}</a>
-            </li>
-          {% endfor %}
-          {% if page_obj.has_next %}
-            <li class="page-item"><a href="?page={{ page_obj.next_page_number }}" class="page-link">&raquo;</a></li>
-          {% endif %}
-        </ul>
-      </nav>
-    </div>
+  <div id="stations-list">
+    {% include 'admin_panel/layout/radio_stations/station_list_partial.html' %}
   </div>
 </div>
 
-{% comment %} <script src="{% static 'js/jquery.min.js' %}"></script> {% endcomment %}
-<script>
-  // (Later we can add AJAX-based pagination)
-  $('#searchBox').on('keyup', function() {
-    const query = $(this).val().toLowerCase();
-    $('.station-item').each(function() {
-      $(this).toggle($(this).text().toLowerCase().includes(query));
-    });
-  });
-</script>
+<script src="https://unpkg.com/htmx.org@1.9.2"></script>
+
 {% endblock %}
 
