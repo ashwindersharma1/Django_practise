@@ -20,13 +20,13 @@
   </div>
 
   <div class="d-flex align-items-center gap-2">
-    <button class="btn btn-outline-primary btn-sm">
+    <button class="btn btn-outline-primary btn-sm" id="view-{{station.uuid}}"  onclick="window.location.href='{% url 'view_radio_station' station.slug %}'""	>
       <i class="bi bi-eye"></i> View
     </button>
-    <button class="btn btn-outline-warning btn-sm">
+    <button class="btn btn-outline-warning btn-sm" id="edit-{{station.uuid }}">
       <i class="bi bi-pencil"></i> Edit
     </button>
-    <button class="btn btn-outline-danger btn-sm">
+    <button class="btn btn-outline-danger btn-sm" id="delete-{{ station.uuid }}">
       <i class="bi bi-trash"></i> Delete
     </button>
   </div>
@@ -86,3 +86,17 @@
     {% endif %}
   </div>
   
+  {% comment %} <script>
+    $('button#view-{{station.uuid }}').click(function() {
+      const station_uuid = $(this).attr('id');
+      $(this).submit(function(e	 {)
+        e.preventDefault();
+        $.ajax({
+          url: url('view_radio_station', station_uuid=station_uuid),
+          type: 'GET',
+          data: { station_uuid: station_uuid },
+          success: function(response) {
+            console.log(response);
+          }
+    });
+  </script> {% endcomment %}

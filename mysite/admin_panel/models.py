@@ -66,11 +66,15 @@ class Representative(models.Model):
 
 
 from accounts.models import User
+from django.utils.text import slugify
 # Use the correct user model (custom or default)
 
 class RadioStation(models.Model):
     uuid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=255, unique=True)
+    # slug = models.SlugField(unique=False, null=True, blank=True)
+    slug = models.SlugField(unique=True, blank=False, null=False)
+    # slug = models.SlugField(unique=True, blank=True)
     market = models.ForeignKey(
         'Market', on_delete=models.SET_NULL, null=True, related_name='radio_stations'
     )
@@ -104,3 +108,14 @@ class RadioStation(models.Model):
 
     def __str__(self):
         return self.name
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            base_slug = slugify(self.name)
+            unique_slug = base_slug
+            counter = 1
+            while RadioStation.objects.filter(slug=unique_slug).exists():
+                unique_slug = f"{base_slug}-{counter}"
+                counter += 1
+            self.slug = unique_slug
+        super().save(*args, **kwargs)

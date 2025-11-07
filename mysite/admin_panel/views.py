@@ -71,3 +71,11 @@ def list_radio_stations(request):
 
     return render(request, 'admin_panel/layout/radio_stations/list.html', context)
    
+
+from django.shortcuts import get_object_or_404
+def view_radio_station(request, slug):
+    station = get_object_or_404(
+        RadioStation.objects.select_related('market', 'format', 'rep'),
+        slug=slug
+        )
+    return render(request, 'admin_panel/layout/radio_stations/view_radio_station.html', {'station': station})

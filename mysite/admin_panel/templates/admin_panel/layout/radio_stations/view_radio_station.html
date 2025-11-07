@@ -1,0 +1,153 @@
+{% extends "admin_panel/layout/base_dashboard.html" %}
+
+{% block styles %}
+    <style>
+        body {
+            background-color: #fafafa;
+        }
+        .section-card {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 0 8px rgba(0,0,0,0.05);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .section-title {
+            font-weight: 600;
+            color: #1e73be;
+            margin-bottom: 15px;
+        }
+        .station-name {
+            font-size: 1.8rem;
+            font-weight: 600;
+        }
+        .subheading {
+            color: #6c757d;
+            font-size: 1rem;
+        }
+        .label {
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+        .value {
+            font-weight: 500;
+        }
+        .btn-edit {
+            border: 1px solid #007bff;
+        }
+        .status-badge {
+            background-color: #d4f9e2;
+            color: #198754;
+            font-weight: 500;
+            border-radius: 20px;
+            padding: 4px 12px;
+            font-size: 0.85rem;
+        }
+    </style>
+    {% endblock styles %}
+
+
+    {% block content %}
+
+<div class="container py-4">
+    <!-- Header -->
+    <div class="d-flex align-items-center mb-3">
+        <button class="btn btn-link text-decoration-none me-3" onclick="history.back()">←</button>
+        <div>
+            <div class="station-name">{{ station.name }}</div>
+            <div class="subheading">{{ station.market }}</div>
+        </div>
+    </div>
+
+    <!-- Top Row -->
+    <div class="row">
+        <!-- Station Info -->
+        <div class="col-md-6">
+            <div class="section-card">
+                <div class="section-title">Station Information</div>
+                <div class="row">
+                    <div class="col-6 mb-2">
+                        <div class="label">Station Name</div>
+                        <div class="value">{{ station.name }}</div>
+                    </div>
+                    <div class="col-6 mb-2">
+                        <div class="label">Market</div>
+                        <div class="value">{{ station.market }}</div>
+                    </div>
+                    <div class="col-6 mb-2">
+                        <div class="label">Owner</div>
+                        <div class="value">{{ station.owner }}</div>
+                    </div>
+                    <div class="col-6 mb-2">
+                        <div class="label">Format</div>
+                        <div class="value">{{ station.format }}</div>
+                    </div>
+                    <div class="col-6 mb-2">
+                        <div class="label">Station Group</div>
+                        <div class="value">{{ station.station_group }}</div>
+                    </div>
+                    <div class="col-6 mb-2">
+                        <div class="label">REP</div>
+                        <div class="value">{{ station.rep }}</div>
+                    </div>
+                    <div class="col-12 mb-2">
+                        <div class="label">Description</div>
+                        <div class="value">{{ station.description }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Assigned User + Management -->
+        <div class="col-md-6">
+            <div class="section-card mb-3">
+                <div class="section-title">Assigned User</div>
+                <div class="d-flex align-items-center">
+                    <i class="bi bi-person me-2"></i>
+                    <span class="fw-medium">{{ station.assigned_user }}</span>
+                </div>
+            </div>
+
+            <div class="section-card d-flex justify-content-between align-items-start">
+                <div>
+                    <div class="section-title">Management</div>
+                    <div><span class="label">Created</span><br><span class="value">{{ station.created_at }}</span></div>
+                    <div class="mt-2"><span class="label">Last Updated</span><br><span class="value">{{ station.updated_at }}</span></div>
+                </div>
+                <div class="d-flex flex-column align-items-end">
+                    <a href="" class="btn btn-outline-primary btn-sm mb-2">Edit Station</a>
+                    <form action="" method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-outline-danger btn-sm">Delete</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Schedules -->
+    <div class="section-card">
+        <div class="section-title">Recent Schedules</div>
+        {% if schedules %}
+            {% for schedule in schedules %}
+            <div class="d-flex justify-content-between align-items-center border rounded p-3 mb-2">
+                <div>
+                    <div class="fw-semibold">{{ schedule.name }}</div>
+                    <div class="text-muted small">
+                        <i class="bi bi-calendar-event me-1"></i>{{ schedule.start_date }} - {{ schedule.end_date }}
+                    </div>
+                </div>
+                <span class="status-badge">{{ schedule.status }}</span>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="text-muted">No recent schedules.</div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Bootstrap Icons -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+
+{% endblock content %}
