@@ -69,5 +69,19 @@
 
 <script src="https://unpkg.com/htmx.org@1.9.2"></script>
 
+<script>
+  {% if messages %}
+    {% for message in messages %}
+      toastr.options = {
+        "closeButton": true,
+        "progressBar": true,
+        "timeOut": "3000",
+        "positionClass": "toast-top-right"
+      };
+      toastr["{{ message.tags }}"]("{{ message }}");
+    {% endfor %}
+  {% endif %}
+</script>
+
 {% endblock %}
 
