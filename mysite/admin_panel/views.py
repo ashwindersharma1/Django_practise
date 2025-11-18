@@ -65,6 +65,16 @@ def list_radio_stations(request):
         'total_stations': total_stations,
         'active_stations': active_stations,
         'total_markets': total_markets,
+        'formats': Format.objects.all(),
+        'reps': Representative.objects.all(),
+        'users': User.objects.all(),
+        'station': {
+            # 'station': page_obj.stations,   # no specific station selected
+            'markets': Market.objects.all(),
+            'formats': Format.objects.all(),
+            'rep': Representative.objects.all(),
+            'users': User.objects.all(),
+        },
     }
 
  # If HTMX or AJAX request, return partial
@@ -91,12 +101,12 @@ def view_radio_station(request, slug):
     return render(request, 'admin_panel/layout/radio_stations/view_radio_station.html', {'station': context})
 
 
-def edit_radio_station(request, slug):
-    station = get_object_or_404(
-        RadioStation.objects.select_related('market', 'format', 'rep'),
-        slug=slug
-        )
-    return render(request, 'admin_panel/layout/radio_stations/edit_radio_station.html', {'station': station})
+# def edit_radio_station(request, slug):
+#     station = get_object_or_404(
+#         RadioStation.objects.select_related('market', 'format', 'rep'),
+#         slug=slug
+#         )
+#     return render(request, 'admin_panel/layout/radio_stations/edit_radio_station.html', {'station': station})
 
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
@@ -112,7 +122,7 @@ def update_station(request, slug):
         # --- Update simple fields ---
         station.name = request.POST.get('name', station.name)
         station.owner = request.POST.get('owner', station.owner)
-        station.station_group = request.POST.get('station_group', station.station_group)
+        station.station_group = request.POST.get('station_group')
         station.description = request.POST.get('description', station.description)
 
         # --- Update foreign keys (check if provided) ---
@@ -132,7 +142,7 @@ def update_station(request, slug):
 
         # --- Save changes ---
         station.save()
-
+        messages.success(request, f"Station '{station.name}' updated successfully!")
         return JsonResponse({"success": True, "message": "Station updated successfully!"})
 
     except Exception as e:

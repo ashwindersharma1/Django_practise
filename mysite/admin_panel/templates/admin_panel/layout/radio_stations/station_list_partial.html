@@ -23,12 +23,37 @@
     <button class="btn btn-outline-primary btn-sm" id="view-{{station.uuid}}"  onclick="window.location.href='{% url 'view_radio_station' station.slug %}'""	>
       <i class="bi bi-eye"></i> View
     </button>
-    <button class="btn btn-outline-warning btn-sm" id="edit-{{station.uuid }}">
+    {% comment %} <button class="btn btn-outline-warning btn-sm" id="edit-{{station.uuid }}">
       <i class="bi bi-pencil"></i> Edit
+    </button> {% endcomment %}
+    {% comment %} <span class="d-inline-block" tabindex="0" data-bs-toggle="tooltip" title="Edit Station">{{markets}}
+    </span> {% endcomment %}
+     <button class="btn  btn-sm  btn-outline-primary me-2"
+                    data-bs-toggle="modal"
+                    data-bs-target="#editStationModal"
+                    data-market="{{ markets }}"
+                    data-format="{{ formats }}"
+                    data-rep="{{ reps }}"
+                    data-owner="{{ station.owner  }}"
+                    data-stationgroup="{{ station.station_group }}"
+                    {% comment %} data-slug="{{ station.station.slug }}" {% endcomment %}
+                    data-slug="{{ station.slug }}"
+                    data-name="{{ station.name }}"
+                    data-owner="{{ station.owner }}"
+                    data-market-id="{{ station.market.uuid }}"
+                    data-format-id="{{ station.format.uuid }}"
+                    data-rep-id="{{ station.rep.uuid }}"
+                    data-assign-user-id="{{ station.assign_user.id }}"
+                    data-description="{{ station.description }}">
+                    <i class="bi bi-pencil"></i> Edit
     </button>
-    <button class="btn btn-outline-danger btn-sm" id="delete-{{ station.uuid }}">
+         <form method="post" action="{% url 'delete_radio_station' station.slug %}" onsubmit="return confirm('Are you sure you want to delete this station?');">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-outline-danger btn-sm">Delete</button>
+                      </form>
+    {% comment %} <button class="btn btn-outline-danger btn-sm" id="delete-{{ station.uuid }}">
       <i class="bi bi-trash"></i> Delete
-    </button>
+    </button> {% endcomment %}
   </div>
 </div>
 {% empty %}
@@ -86,17 +111,48 @@
     {% endif %}
   </div>
   
-  {% comment %} <script>
-    $('button#view-{{station.uuid }}').click(function() {
-      const station_uuid = $(this).attr('id');
-      $(this).submit(function(e	 {)
-        e.preventDefault();
-        $.ajax({
-          url: url('view_radio_station', station_uuid=station_uuid),
-          type: 'GET',
-          data: { station_uuid: station_uuid },
-          success: function(response) {
-            console.log(response);
-          }
+ {% include 'admin_panel/components/edit_station_modal.html' %}
+
+<script>
+  const editStationModal = document.getElementById('editStationModal');
+
+  if (editStationModal) {
+    editStationModal.addEventListener('show.bs.modal', function (event) {
+      const triggerButton = event.relatedTarget;
+      if (!triggerButton) {
+        return;
+      }
+
+      const slugInput = this.querySelector('#stationSlug');
+      const nameInput = this.querySelector('#stationName');
+      const marketSelect = this.querySelector('#stationMarket');
+      const ownerInput = this.querySelector('#stationOwner');
+      const formatSelect = this.querySelector('#stationFormat');
+      const groupInput = this.querySelector('#stationGroup');
+      const repSelect = this.querySelector('#stationRep');
+      const assignUserSelect = this.querySelector('#stationAssignUser');
+      const descriptionTextarea = this.querySelector('#stationDescription');
+
+      slugInput.value = triggerButton.dataset.slug || '';
+      nameInput.value = triggerButton.dataset.name || '';
+      ownerInput.value = triggerButton.dataset.owner || '';
+      groupInput.value = triggerButton.dataset.stationgroup || '';
+      descriptionTextarea.value = triggerButton.dataset.description || '';
+
+      marketSelect.value = triggerButton.dataset.marketId || '';
+      formatSelect.value = triggerButton.dataset.formatId || '';
+      repSelect.value = triggerButton.dataset.repId || '';
+      assignUserSelect.value = triggerButton.dataset.assignUserId || '';
     });
-  </script> {% endcomment %}
+  }
+
+      $('#editStationForm').submit(function(e) {
+      e.preventDefault();
+      const slug = $('#stationSlug').val();
+      $.post(`/admin/update-station/${slug}`, $(this).serialize(), function() {
+        location.reload();
+      }).fail(function(xhr) {
+        console.log('❌ Error: ' + xhr.responseText);
+      });
+    });
+</script>
