@@ -175,6 +175,8 @@ class Schedule(models.Model):
 
     class Meta:
         db_table = "schedules"
+        verbose_name = 'Schedule'
+        verbose_name_plural = 'Schedules'
 
     def __str__(self):
         return f"{self.name} ({self.schedule_status})"

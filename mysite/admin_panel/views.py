@@ -2,7 +2,6 @@ from django.shortcuts import render, redirect
 from accounts.utils import admin_required
 from django.contrib import messages
 from django.db.models import Q
-from admin_panel.models import RadioStation,Market,Format,Representative
 from accounts.models import User
 from django.core.paginator import Paginator
 # Create your views here.
@@ -10,9 +9,6 @@ from django.core.paginator import Paginator
 @admin_required
 def dashboard(request):
     return render(request, 'admin_panel/dashboard.html')
-
-def view_campaigns(request):
-    return render(request, 'admin_panel/view_campaigns.html')
 
 def view_radio_stations(request):
      radio_stations = (
@@ -170,3 +166,12 @@ def delete_radio_station(request, slug):
     except Exception as e:
         messages.error(request, f"❌ Failed to delete station: {e}")
         return redirect(request.META.get('HTTP_REFERER', 'list_radio_stations'))
+
+
+def list_campaigns(request):
+
+    total_campaigns = Campaign.objects.count()
+    total_schedules = Schedule.objects.count()
+    # in_progress = Schedule.objects.filter(status='In Progress').count()
+    # submitted = Schedule.objects.filter(status='Submitted').count()
+    return render(request, 'admin_panel/layout/campaigns/lisitng.html')
