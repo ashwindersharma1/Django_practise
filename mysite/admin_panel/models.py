@@ -11,6 +11,7 @@ class Campaign(models.Model):
     data_source = models.UUIDField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    slug = models.SlugField(unique=True)
     schedules = models.ManyToManyField(
         'Schedule',
         through='CampaignSchedule',

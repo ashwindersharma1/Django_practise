@@ -254,3 +254,8 @@ def list_campaigns(request):
         'campaigns_list': campaigns_list,
         'today': date.today(),
     })
+
+
+def edit_campaign(request,slug):
+    campaign = get_object_or_404(Campaign, slug=slug)
+    return render(request, 'admin_panel/layout/campaigns/edit_campaign.html', {'campaign': campaign})

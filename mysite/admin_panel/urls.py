@@ -8,6 +8,8 @@ urlpatterns = [
     path('update-station/<slug:slug>', views.update_station, name='edit_radio_station'),
     path('delete-station/<slug:slug>', views.delete_radio_station, name='delete_radio_station'),
     # campaigns
-    path('campaigns/', views.list_campaigns, name='campaigns_listing')
+    path('campaigns/', views.list_campaigns, name='campaigns_listing'),
+    path('campaign/edit/<slug:slug>/', views.edit_campaign, name='edit_campaign'),
+    # path('campaigns/edit/', views.edit_campaign, name='edit_campaign'),
     
 ]

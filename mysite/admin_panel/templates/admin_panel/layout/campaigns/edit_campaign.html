@@ -1,0 +1,201 @@
+{% extends "admin_panel/layout/base_dashboard.html" %}
+{% load static %}
+
+
+{% block content %}
+
+<div class="container mt-4">
+
+    <h2>Edit Campaign</h2>
+
+    <!-- Warning -->
+    <div class="alert alert-warning">
+        Please complete all required fields to continue
+    </div>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <!-- Campaign Name -->
+        <div class="mb-3">
+            <label class="form-label">Campaign Name *</label>
+            <input type="text" name="name" class="form-control"
+                   value="{{ campaign.name }}" required>
+        </div>
+
+        <!-- Date Mode Selection -->
+        <div class="mb-3">
+            <label class="form-label">Date Selection Method</label>
+
+            <div class="form-check">
+                <input class="form-check-input"
+                       type="radio"
+                       name="date_mode"
+                       id="manual"
+                       value="manual"
+                       {% if not campaign.weeks %}checked{% endif %}>
+                <label class="form-check-label" for="manual">
+                    Select Start Date and End Date manually
+                </label>
+            </div>
+
+            <div class="form-check">
+                <input class="form-check-input"
+                       type="radio"
+                       name="date_mode"
+                       id="weeks"
+                       value="weeks"
+                       {% if campaign.weeks %}checked{% endif %}>
+                <label class="form-check-label" for="weeks">
+                    Select Start Date and Broadcast Weeks
+                </label>
+            </div>
+        </div>
+
+        <!-- Start Date -->
+        <div class="mb-3">
+            <label class="form-label">Start Date *</label>
+            <input type="date" name="start_date"
+                   class="form-control"
+                   value="{{ campaign.start_date|date:'Y-m-d' }}"
+                   max="{{ campaign.end_date|date:'Y-m-d' }}"
+                   id="startDateInput" required>
+        </div>
+
+        <!-- End Date -->
+        <div class="mb-3" id="end_date_div">
+            <label class="form-label" id="endDateLabel">End Date *</label>
+            <input type="date" name="end_date"
+                   class="form-control"
+                   value="{{ campaign.end_date|date:'Y-m-d' }}"
+                   id="endDateInput">
+        </div>
+
+        <!-- Broadcast Weeks -->
+        <div class="mb-3" id="broadcast_weeks_div">
+            <label class="form-label">Broadcast Weeks *</label>
+            <input type="number" min="1"
+                   name="weeks"
+                   class="form-control"
+                   id="weeksInput"
+                   value="{{ campaign.weeks }}">
+        </div>
+
+        <!-- Summary -->
+        <div class="card mt-4">
+            <div class="card-body">
+                <h5>📘 Campaign Duration Summary</h5>
+                <p>
+                    ⏱ Start: <span id="summaryStartDate">{{ campaign.start_date }}</span> →
+                    End: <span id="summaryEndDate">{{ campaign.end_date }}</span> &nbsp; |
+                    ⏳ Duration:
+                    <span id="summaryWeeks">{{ campaign.weeks }}</span> Weeks
+                </p>
+            </div>
+        </div>
+
+        <!-- Button -->
+        <button type="submit" class="btn btn-primary mt-3">
+            Save Campaign
+        </button>
+    </form>
+</div>
+
+
+
+<!-- ------------------ JAVASCRIPT LOGIC ---------------------->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const radioManual   = document.getElementById("manual");
+    const radioWeeks    = document.getElementById("weeks");
+
+    const startDateInput = document.getElementById("startDateInput");
+    const endDateInput   = document.getElementById("endDateInput");
+    const weeksInput     = document.getElementById("weeksInput");
+
+    const summaryStartDate = document.getElementById("summaryStartDate");
+    const summaryEndDate   = document.getElementById("summaryEndDate");
+    const summaryWeeks     = document.getElementById("summaryWeeks");
+    
+
+    /* ------------------------------------------------------ */
+    /* CALCULATE END DATE BASED ON WEEKS */
+    function calculateEndDate() {
+        if (!startDateInput.value || !weeksInput.value) return;
+
+        let start = new Date(startDateInput.value);
+        let weeks = parseInt(weeksInput.value);
+
+        let end = new Date(start);
+        end.setDate(end.getDate() + (weeks * 7));
+
+        let formatted = end.toISOString().split("T")[0];
+        endDateInput.value = formatted;
+
+        summaryEndDate.innerText = formatted;
+        summaryWeeks.innerText = weeks;
+        summaryStartDate.innerText = startDateInput.value;
+    }
+
+    /* ------------------------------------------------------ */
+    /* CALCULATE WEEKS BASED ON END DATE */
+    function calculateWeeks() {
+        if (!startDateInput.value || !endDateInput.value) return;
+
+        let start = new Date(startDateInput.value);
+        let end = new Date(endDateInput.value);
+        let diff = (end - start) / (1000 * 60 * 60 * 24);
+        let result = Math.ceil(diff / 7);
+
+        weeksInput.value = result;
+        summaryWeeks.innerText = result;
+        summaryEndDate.innerText = endDateInput.value;
+        summaryStartDate.innerText = startDateInput.value;
+    }
+
+    /* ------------------------------------------------------ */
+    /* TOGGLE UI ON MODE CHANGE */
+    function toggleMode() {
+        if (radioManual.checked) {
+            // endDateInput.disabled = false;
+            // weeksInput.style.display = "none"; 
+            $("#broadcast_weeks_div").hide();
+            $("#end_date_div").show();
+
+            // weeksInput.display = true;
+            calculateWeeks();
+        } else {
+            $("#end_date_div").hide();
+            // endDateInput.disabled = true;
+            $("#broadcast_weeks_div").show();
+            // weeksInput.disabled = false;
+            // weeksInput.style.display = "block"; 
+            calculateEndDate();
+        }
+    }
+
+    radioManual.addEventListener("change", toggleMode);
+    radioWeeks.addEventListener("change", toggleMode);
+
+    /* AUTO UPDATE */
+    startDateInput.addEventListener("change", function() {
+        radioWeeks.checked ? calculateEndDate() : calculateWeeks();
+    });
+
+    endDateInput.addEventListener("change", function() {
+        if (radioManual.checked) calculateWeeks();
+    });
+
+    weeksInput.addEventListener("input", function() {
+        if (radioWeeks.checked) calculateEndDate();
+    });
+
+    /* RUN ON LOAD */
+    toggleMode();
+});
+</script>
+
+
+<script src="https://unpkg.com/htmx.org@1.9.2"></script>
+{% endblock %}
