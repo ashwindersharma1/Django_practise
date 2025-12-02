@@ -1,8 +1,13 @@
 from django.shortcuts import render, redirect
 from accounts.utils import admin_required
 from django.contrib import messages
-from django.db.models import Q
+# from django.db.models import Q,Count,Case,When
+from django.db.models import Count, Case, When, Value, CharField
+from datetime import date
 from accounts.models import User
+# from django.db.models import Count
+
+from admin_panel.models import RadioStation, Market, Format, Representative, User, Campaign, Schedule
 from django.core.paginator import Paginator
 # Create your views here.
 
@@ -172,6 +177,80 @@ def list_campaigns(request):
 
     total_campaigns = Campaign.objects.count()
     total_schedules = Schedule.objects.count()
-    # in_progress = Schedule.objects.filter(status='In Progress').count()
-    # submitted = Schedule.objects.filter(status='Submitted').count()
-    return render(request, 'admin_panel/layout/campaigns/lisitng.html')
+    in_progress = Schedule.objects.filter(schedule_status='Pending Review (Admin)').count()
+    submitted = Schedule.objects.filter(schedule_status='Submitted').count()
+    # campaigns_list = Campaign.objects.annotate(
+    #     schedule_count=Count('schedules'),
+    #     campaign_status=Case(
+    #             When(end_date__lt=date.today(), then=Value("Expired")),
+    #             When(end_date__gte=date.today(), then=Value("Active")),
+    #             default=Value("Unknown"),
+    #             output_field=CharField()
+    #         )
+    #     ).order_by('-updated_at')
+
+    
+    campaigns_list = (Campaign.objects
+    .prefetch_related('schedules')              # for M2M join
+                        .annotate(
+                            schedule_count=Count('schedules', distinct=True),
+                            campaign_status=Case(
+                                When(end_date__lt=date.today(), then=Value("Expired")),
+                                When(end_date__gte=date.today(), then=Value("Active")),
+                                default=Value("Unknown"),
+                                output_field=CharField()
+                            )
+                        ).order_by('-updated_at'))
+    
+
+    query = request.GET.get('q', '').strip()
+    # status_filter = request.GET.get('status', '')
+
+    # Base queryset with joins
+    # radio_stations_qs = (
+    #     RadioStation.objects
+    #     .select_related('market', 'format', 'rep')
+    #     .all()
+    #     .order_by('name')
+    # )
+
+      # --- Filtering logic ---
+    if query:
+        campaigns_list = campaigns_list.filter(
+            Q(name__icontains=query)
+        )
+
+    # --- Pagination setup ---
+    page_number = request.GET.get('page', 1)
+    paginator = Paginator(campaigns_list, 10)  # 10 records per page
+    page_obj = paginator.get_page(page_number)
+
+  # --- Stats ---
+
+    context = {
+        'page_obj': page_obj,
+        'query': query,
+        # 'station': {
+        #     # 'station': page_obj.stations,   # no specific station selected
+        #     'markets': Market.objects.all(),
+        #     'formats': Format.objects.all(),
+        #     'rep': Representative.objects.all(),
+        #     'users': User.objects.all(),
+        # },
+    }
+
+ # If HTMX or AJAX request, return partial
+    if request.headers.get('HX-Request') == 'true' or request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        return render(request, 'admin_panel/layout/radio_stations/station_list_partial.html', context)
+
+    # return render(request, 'admin_panel/layout/campaigns/listing.html', context)    
+    
+    return render(request, 'admin_panel/layout/campaigns/lisitng.html', {
+        'page_obj': page_obj,
+        'total_campaigns': total_campaigns,
+        'total_schedules': total_schedules,
+        'in_progress': in_progress,
+        'submitted': submitted,
+        'campaigns_list': campaigns_list,
+        'today': date.today(),
+    })

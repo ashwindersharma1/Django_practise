@@ -11,7 +11,11 @@ class Campaign(models.Model):
     data_source = models.UUIDField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-
+    schedules = models.ManyToManyField(
+        'Schedule',
+        through='CampaignSchedule',
+        related_name='campaigns'
+    )
     class Meta:
         db_table = 'campaigns'
         verbose_name = 'Campaign'
@@ -180,3 +184,20 @@ class Schedule(models.Model):
 
     def __str__(self):
         return f"{self.name} ({self.schedule_status})"
+
+
+class CampaignSchedule(models.Model):
+    campaign = models.ForeignKey(
+        'Campaign',
+        on_delete=models.CASCADE,
+        db_column='campaign_id'
+    )
+    schedule = models.ForeignKey(
+        'Schedule',
+        on_delete=models.CASCADE,
+        db_column='schedule_id'
+    )
+
+    class Meta:
+        db_table = 'campaign_schedules'
+        unique_together = ('campaign', 'schedule')
