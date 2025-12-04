@@ -1,0 +1,148 @@
+{% load static %}
+
+{% for schedule in page_obj %}
+
+<div class="p-3 mb-3 rounded"
+     style="background:#fffafa; border:1px solid #ffecec; box-shadow:0 1px 3px rgba(0,0,0,0.05);">
+
+    <div class="d-flex justify-content-between align-items-start">
+
+        <!-- LEFT SIDE -->
+        <div class="d-flex align-items-start gap-3">
+
+            <!-- Checkbox -->
+            <input type="checkbox" class="form-check-input  green-check mt-1">
+
+            <!-- Info Block -->
+            <div>
+
+                <!-- Title Row -->
+                <div class="d-flex align-items-center gap-3 mb-2">
+
+                    <!-- Schedule Name -->
+                    <span class="fw-bold fs-5">{{ schedule.name }}</span>
+
+                    <!-- Status Badge -->
+                    <span class="badge rounded-pill"
+                          style="background: #fff4c2; color:#8a6d00; border:1px solid #ffe89c;">
+                        {{ schedule.schedule_status }}
+                    </span>
+
+                    <!-- Warning Icon -->
+                    <i class="fa fa-exclamation-triangle text-danger"></i>
+                </div>
+
+                <!-- Dates + EPD -->
+                <div class="d-flex align-items-center gap-4 text-muted small">
+
+                    <span class="d-flex align-items-center gap-1">
+                        <i class="fa fa-calendar"></i>
+                        {{ schedule.created_at|date:"d/m/Y" }}
+                    </span>
+
+                    <!-- <span class="d-flex align-items-center gap-1">
+                        <i class="fa fa-history"></i>
+                        Updated {{ schedule.updated_at|date:"d/m/Y" }}
+                    </span> -->
+                    <span class="d-flex align-items-center gap-1">
+                        <img src="{% static 'admin_panel/icons/download.svg' %}" 
+                             alt="updated" 
+                             style="width:16px; height:16px;">
+                        {{ schedule.updated_at }}
+                    </span>
+                    
+                    <span class="text-danger fw-semibold d-flex align-items-center gap-1">
+                        <!-- <i class="fa fa-ban"></i> -->
+                        <img src="{% static 'admin_panel/icons/epd.svg' %}" 
+                        alt="updated" 
+                        style="width:16px; height:16px;">
+                        EPD: No
+                    </span>
+
+                </div>
+
+            </div>
+        </div>
+
+
+        <!-- RIGHT SIDE -->
+        <div class="text-end">
+
+            <!-- Stats -->
+            <div class="d-flex align-items-center gap-5 mb-3">
+
+                <div class="text-success fw-bold">
+                    ${{ schedule.total_cost|default:0 }}
+                    <div class="small text-muted">Total $</div>
+                </div>
+
+                <div class="text-primary fw-bold">
+                    {{ schedule.total_aqh|default:0 }}
+                    <div class="small text-muted">Total AQH</div>
+                </div>
+
+                <div class="text-warning fw-bold">
+                    ${{ schedule.cpm|default:"0.00" }}
+                    <div class="small text-muted">CPM</div>
+                </div>
+                 <!-- Toggle + Button -->
+                <div class="d-flex align-items-center gap-3 justify-content-end">
+
+                    <!-- Toggle -->
+                    <div class="form-check form-switch">
+                        <input type="checkbox" class="form-check-input green-check"
+                               {% if schedule.is_active %}checked{% endif %}>
+                    </div>
+    
+                    <!-- View Schedule -->
+                    <a href=""
+                       class="btn btn-light border px-3">
+                        View Schedule <i class="fa fa-chevron-right ms-1"></i>
+                    </a>
+    
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{% empty %}
+<p class="text-muted">No schedules found.</p>
+{% endfor %}
+
+
+<!-- PAGINATION -->
+<div class="d-flex justify-content-between align-items-center mt-3">
+
+    <div class="text-muted small">
+        Showing {{ page_obj.start_index }}–{{ page_obj.end_index }} of {{ page_obj.paginator.count }} schedules
+    </div>
+
+    <div class="d-flex gap-2">
+
+        {% if page_obj.has_previous %}
+        <button 
+            hx-get="?page={{ page_obj.previous_page_number }}"
+            hx-target="#scheduleList"
+            hx-swap="innerHTML"
+            class="btn btn-outline-secondary btn-sm">
+            <i class="fa fa-chevron-left"></i>
+        </button>
+        {% endif %}
+
+        <span class="btn btn-light btn-sm disabled">{{ page_obj.number }}</span>
+
+        {% if page_obj.has_next %}
+        <button 
+            hx-get="?page={{ page_obj.next_page_number }}"
+            hx-target="#scheduleList"
+            hx-swap="innerHTML"
+            class="btn btn-outline-secondary btn-sm">
+            <i class="fa fa-chevron-right"></i>
+        </button>
+        {% endif %}
+
+    </div>
+
+</div>

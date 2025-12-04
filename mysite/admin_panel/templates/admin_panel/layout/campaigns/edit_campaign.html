@@ -5,15 +5,39 @@
 {% block content %}
 
 <div class="container mt-4">
+    <!-- <div class="row">
+        <a href="{% url 'campaigns_listing' %}" 
+           class="btn btn-light shadow-sm d-inline-flex justify-content-center align-items-center"
+           style="border:1px solid #e5e7eb; width:40px; height:40px; border-radius:12px;">
+            ←
+        </a>
+        <h2>Edit Campaign</h2>
+    </div> -->
+    <div class="row align-items-center mb-3">
 
-    <h2>Edit Campaign</h2>
+        <!-- Back Button -->
+        <div class="col-auto">
+            <a href="{% url 'campaigns_listing' %}" 
+               class="btn btn-light shadow-sm d-inline-flex justify-content-center align-items-center"
+               style="border:1px solid #e5e7eb; width:40px; height:40px; border-radius:12px;">
+                ←
+            </a>
+        </div>
+    
+        <!-- Heading -->
+        <div class="col">
+            <h2 class="mb-0 ms-2">Edit Campaign</h2>
+        </div>
+    
+    </div>
+   
 
     <!-- Warning -->
     <div class="alert alert-warning">
         Please complete all required fields to continue
     </div>
 
-    <form method="POST">
+    <form method="POST" action="{% url 'update_campaign' campaign.slug %}">
         {% csrf_token %}
 
         <!-- Campaign Name -->

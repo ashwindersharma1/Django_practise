@@ -12,33 +12,16 @@
 
         <!-- jQuery + Toastr JS -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>    
-
-    <style>
-        body {
-            background-color: #f8f9fa;
-        }
-        .sidebar {
-            min-height: 100vh;
-            background-color: #343a40;
-            color: #fff;
-            padding-top: 1rem;
-        }
-        .sidebar a {
-            color: #adb5bd;
-            display: block;
-            padding: 10px 15px;
-            text-decoration: none;
-        }
-        .sidebar a:hover {
-            background-color: #495057;
-            color: #fff;
-        }
-        .content {
-            padding: 20px;
-        }
-    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script> 
+    
+    <!-- {% load static %} -->
     <link rel="stylesheet" href="{% static 'admin_panel/css/styles.css' %}">
+    <!-- <link rel="stylesheet" href="{% static 'admin_panel/css/styles.css' %}"> -->
+    <!-- <style>
+       
+       
+    </style> -->
+    <!-- <link rel="stylesheet" href="{% static 'admin_panel/css/styles.css' %}"> -->
     {% block styles %}{% endblock styles %}
 </head>
 <body>
@@ -46,7 +29,7 @@
     <div class="row">
         <!-- Sidebar -->
         <nav class="col-md-2 sidebar">
-            <h4 class="text-center">Django Practise</h4>
+            <h4 class="text-center">Django</h4>
             <hr>
             {% block sidebar %}
         

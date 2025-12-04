@@ -3,8 +3,12 @@ from accounts.utils import admin_required
 from django.contrib import messages
 # from django.db.models import Q,Count,Case,When
 from django.db.models import Count, Case, When, Value, CharField
-from datetime import date
+from datetime import datetime, timedelta, date
 from accounts.models import User
+from pprint import pprint
+import math
+from django.db.models import Q
+
 # from django.db.models import Count
 
 from admin_panel.models import RadioStation, Market, Format, Representative, User, Campaign, Schedule
@@ -259,3 +263,88 @@ def list_campaigns(request):
 def edit_campaign(request,slug):
     campaign = get_object_or_404(Campaign, slug=slug)
     return render(request, 'admin_panel/layout/campaigns/edit_campaign.html', {'campaign': campaign})
+
+
+# def update_campaign(request,slug):
+#     campaign.save()
+#     return render(request, 'admin_panel/layout/campaigns/edit_campaign.html', {'campaign': campaign})
+
+
+# @require_POST
+def update_campaign(request, slug):
+    campaign = get_object_or_404(Campaign, slug=slug)
+
+    if request.method == "POST":
+       
+        # if request.method == "POST":
+
+        campaign.name = request.POST.get("name", campaign.name)
+
+        # Fix 1: Correct name is `date_mode`
+        date_mode = request.POST.get("date_mode")
+
+        # --- Start Date ---
+        start_date_str = request.POST.get("start_date")
+        if start_date_str:
+            campaign.start_date = datetime.strptime(start_date_str, "%Y-%m-%d").date()
+
+        # --- Manual Mode ---
+        if date_mode == "manual":
+            end_date_str = request.POST.get("end_date")
+            if end_date_str:
+                campaign.end_date = datetime.strptime(end_date_str, "%Y-%m-%d").date()
+
+            # Manual mode means weeks = calculated
+            diff = (campaign.end_date - campaign.start_date).days
+            campaign.weeks = math.ceil(diff / 7)
+
+        # --- Broadcast Weeks Mode ---
+        elif date_mode == "weeks":
+
+            # Fix 2: Correct field name is `weeks`
+            weeks = int(request.POST.get("weeks", 0))
+
+            if weeks > 0:
+                campaign.weeks = weeks
+                campaign.end_date = campaign.start_date + timedelta(weeks=weeks)
+
+        campaign.save()
+
+        messages.success(request, "Campaign updated successfully!")
+        return redirect("edit_campaign", slug=campaign.slug)
+
+    # context = {"campaign": campaign}
+    return render(request, 'admin_panel/layout/campaigns/edit_campaign.html', {'campaign': campaign})
+    # return render(request, "admin_panel/campaign/edit_campaign.html", context)
+    
+
+def view_campaign(request,slug):
+    campaign = get_object_or_404(Campaign, slug=slug)
+    schedules = campaign.schedules.all().order_by('-created_at')
+    # pprint(list(schedules.values()))
+    
+  
+
+    search_query = request.GET.get('search', '').strip()
+
+    if search_query:
+        schedules = schedules.filter(
+            Q(name__icontains=search_query) |
+            Q(schedule_status__icontains=search_query)
+        )
+
+      # Pagination
+    page_number = request.GET.get('page', 1)
+    paginator = Paginator(schedules, 5)     # 5 schedules per page
+    page_obj = paginator.get_page(page_number)
+    context = {
+        'campaign': campaign,
+        'page_obj': page_obj,
+    }    
+    # schedules = schedules.filter(name__icontains=query)
+    # HTMX request → send partial HTML
+    if request.headers.get('HX-Request') == 'true':
+       return render(request, 'admin_panel/layout/campaigns/view_campaign_partial.html', context)
+
+    return render(request, 'admin_panel/layout/campaigns/view_campaign.html', context)
+    

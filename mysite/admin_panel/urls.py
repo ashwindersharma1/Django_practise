@@ -10,6 +10,8 @@ urlpatterns = [
     # campaigns
     path('campaigns/', views.list_campaigns, name='campaigns_listing'),
     path('campaign/edit/<slug:slug>/', views.edit_campaign, name='edit_campaign'),
+    path('update-campaign/<slug:slug>', views.update_campaign, name='update_campaign'),
+    path('campaign/<slug:slug>', views.view_campaign, name='view_campaign'),
     # path('campaigns/edit/', views.edit_campaign, name='edit_campaign'),
     
 ]
