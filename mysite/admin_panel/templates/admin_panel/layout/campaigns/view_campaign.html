@@ -146,45 +146,159 @@
 
 <!-- Filter Modal -->
 <div class="modal fade" id="filterModal" tabindex="-1">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        
-        <div class="modal-header">
-          <h5 class="modal-title">Filter Schedules</h5>
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content p-2">
+  
+        <div class="modal-header border-0">
+          <h5 class="modal-title d-flex align-items-center gap-2">
+            <img src="{% static 'admin_panel/icons/filter.svg' %}" style="width:20px;"/>
+            Filter Schedules
+          </h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         </div>
   
         <div class="modal-body">
   
           <form 
-              id="filterForm"
-              hx-get="{% url 'view_campaign' campaign.slug %}"
-              hx-target="#schedules-list"
-              hx-push-url="true"
+            id="filterForm"
+            hx-get="{% url 'view_campaign' campaign.slug %}"
+            hx-target="#schedules-list"
+            hx-push-url="true"
           >
-              <div class="mb-3">
-                  <label class="form-label">Search</label>
-                  <input type="text" name="search" class="form-control">
+            <!-- GRID -->
+            <div class="row g-4">
+  
+              <!-- STATUS -->
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">Status</label>
+                <select name="status" class="form-select">
+                   
+                  <option value="">Pending Review (Admin)</option>
+                  <option value="DRAFT">Pending Review (Station Partner)</option>
+                  <option value="ACTIVE">Approved</option>
+                  <option value="COMPLETED">Declined (Admin)</option>
+                  <option value="COMPLETED">Declined (Station Partner)</option>
+                  <option value="COMPLETED">Draft</option>
+                  <option value="COMPLETED">Insertion Order</option>
+                  <option value="COMPLETED">Contract Generated</option>
+                </select>
+              </div>
+              <!-- MARKET -->
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">Market</label>
+                <select name="market" class="form-select">
+                  <option value="">All Market</option>
+                  {% for m in markets %}
+                    <option value="{{ m.name }}">{{ m.name }}</option>
+                  {% endfor %}
+                </select>
               </div>
   
-              <div class="mb-3">
-                  <label class="form-label">Status</label>
-                  <select name="status" class="form-select">
-                      <option value="">All</option>
-                      <option value="DRAFT">Draft</option>
-                      <option value="ACTIVE">Active</option>
-                      <option value="COMPLETED">Completed</option>
-                  </select>
+              <!-- REP -->
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">REP</label>
+                <select name="rep" class="form-select" >
+                  <option value="">All Representative</option>
+                  {% for rep in reps %}
+                    <option value="{{ rep.id }}">{{ rep.name }}</option>
+                  {% endfor %}
+                </select>
               </div>
   
-              <button class="btn btn-primary" type="submit">Apply Filters</button>
+              <!-- OWNER -->
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">Owner</label>
+                <select name="owner" class="form-select">
+                  <option value="">All Owner</option>
+                  {% for o in owners %}
+                    <option value="{{ o.id }}">{{ o.name }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+  
+              <!-- FORMAT -->
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">Format</label>
+                <select name="format" class="form-select">
+                  <option value="">All Format</option>
+                  {% for f in formats %}
+                    <option value="{{ f.id }}">{{ f.name }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+  
+              <!-- STATION -->
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">Station</label>
+                <select name="station" class="form-select">
+                  <option value="">All Station Submitted</option>
+                  {% for s in radio_stations %}
+                    <option value="{{ s.id }}">{{ s.name }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+  
+              <!-- EARLY PAYMENT DISCOUNT -->
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">Early Payment Discount</label>
+                <select name="epd" class="form-select">
+                  <option value="">All Early Payment Discount</option>
+                  <option value="yes">Yes</option>
+                  <option value="no">No</option>
+                </select>
+              </div>
+  
+              <!-- TOTAL AMOUNT RANGE -->
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">Total Amount ($)</label>
+                <div class="d-flex gap-2">
+                  <input name="amount_from" type="number" class="form-control" placeholder="From">
+                  <input name="amount_to" type="number" class="form-control" placeholder="To">
+                </div>
+              </div>
+  
+              <!-- TOTAL AQH -->
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">Total AQH</label>
+                <div class="d-flex gap-2">
+                  <input name="aqh_from" type="number" class="form-control" placeholder="From">
+                  <input name="aqh_to" type="number" class="form-control" placeholder="To">
+                </div>
+              </div>
+  
+              <!-- TOTAL CPM -->
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">Total CPM</label>
+                <div class="d-flex gap-2">
+                  <input name="cpm_from" type="number" class="form-control" placeholder="From">
+                  <input name="cpm_to" type="number" class="form-control" placeholder="To">
+                </div>
+              </div>
+  
+            </div>
+  
+            <!-- BUTTONS -->
+            <div class="d-flex justify-content-end gap-3 mt-4">
+              <button 
+                type="reset" 
+                class="btn btn-outline-secondary"
+                onclick="document.getElementById('filterForm').reset();"
+              >
+                Clear All
+              </button>
+  
+              <button type="submit" class="btn btn-primary px-4">
+                Apply Filters
+              </button>
+            </div>
+  
           </form>
-  
         </div>
+  
       </div>
     </div>
   </div>
-  <!-- Filter Modal -->
+  
 
 <script src="https://unpkg.com/htmx.org@1.9.2"></script>
 

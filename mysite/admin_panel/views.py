@@ -320,11 +320,13 @@ def update_campaign(request, slug):
 
 def view_campaign(request,slug):
     campaign = get_object_or_404(Campaign, slug=slug)
+    reps = Representative.objects.all().values('name')
+    # markets = get_object_or_404(Market.objects.all().values('name'))
     schedules = campaign.schedules.all().order_by('-created_at')
-    # pprint(list(schedules.values()))
-    
-  
-
+    owners =  User.objects.all().values('name')
+    formats = Format.objects.all().values('name')
+    radio_stations =RadioStation.objects.all().values('name')
+    pprint(list(schedules.values()))
     search_query = request.GET.get('search', '').strip()
 
     if search_query:
@@ -340,8 +342,13 @@ def view_campaign(request,slug):
     context = {
         'campaign': campaign,
         'page_obj': page_obj,
+        'markets': Market.objects.all().values('name'),
+        'reps': reps,
+        'owners': owners,
+        'formats':formats,
+        'radio_stations':radio_stations,	
     }    
-    # schedules = schedules.filter(name__icontains=query)
+
     # HTMX request → send partial HTML
     if request.headers.get('HX-Request') == 'true':
        return render(request, 'admin_panel/layout/campaigns/view_campaign_partial.html', context)
