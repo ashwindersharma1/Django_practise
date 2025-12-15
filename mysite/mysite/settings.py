@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'accounts',
     'admin_panel',
+    'django_q',  # django-q2 package uses 'django_q' as import name
 ]
 
 # MIDDLEWARE = [
@@ -139,3 +140,76 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Django-Q Configuration
+# https://django-q.readthedocs.io/en/latest/configure.html
+
+Q_CLUSTER = {
+    'name': 'mysite_queue',
+    'workers': 1,
+    'recycle': 500,
+    'timeout': 60,
+    'retry': 120,
+    'queue_limit': 50,
+    'bulk': 10,
+    'orm': 'default',  # Use Django ORM for database backend
+    'sync': False,  # Set to True for synchronous execution (testing)
+    'catch_up': False,  # Don't catch up on missed schedules
+    'max_attempts': 3,  # Maximum retry attempts
+    'attempt_count': 3,
+    'save_limit': 250,
+    'guard_cycle': 5,
+    'cpu_affinity': 1,
+    'label': 'Django Q',
+    'redis': {},  # Not needed for database backend
+}
+
+import os
+from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+
+    'formatters': {
+        'verbose': {
+            'format': '[{levelname}] {asctime} {name}: {message}',
+            'style': '{',
+        },
+        'simple': {
+            'format': '[{levelname}] {message}',
+            'style': '{',
+        },
+    },
+
+    'handlers': {
+        'file': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'logs/app.log'),
+            'formatter': 'verbose',
+        },
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+
+    'root': {
+        'handlers': ['file', 'console'],
+        'level': 'INFO',
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file', 'console'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+        'admin_panel': {
+            'handlers': ['file', 'console'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+    },
+}

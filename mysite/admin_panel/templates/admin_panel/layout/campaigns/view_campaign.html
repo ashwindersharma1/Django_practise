@@ -53,7 +53,7 @@
         <div class="border rounded p-3">
             <h6 class="text-primary fw-bold">Total AQH</h6>
             <div class="d-flex justify-content-between">
-                <span class="fw-bold">{{ campaign.total_aqh|default:0 }}</span>
+                <span class="fw-bold">${{ campaign.total_aqh|default:0 }}</span>
                 <i class="fa fa-chart-line text-primary"></i>
             </div>
         </div>
@@ -126,9 +126,16 @@
  
     </div>
 
-    <button class="btn btn-light border">
+    <!-- <button class="btn btn-light border" onclick="notify_all()">
         Notify All
-    </button>
+    </button> -->
+    <button
+    class="btn btn-light border"
+    hx-get="{% url 'notify_all' campaign.uuid %}"
+    hx-trigger="click"
+    hx-swap="none" >
+    Notify All
+</button>
 </div>
 
 
@@ -162,8 +169,9 @@
           <form 
             id="filterForm"
             hx-get="{% url 'view_campaign' campaign.slug %}"
-            hx-target="#schedules-list"
+            hx-target="#scheduleList"
             hx-push-url="true"
+            hx-on="htmx:afterRequest: bootstrap.Modal.getInstance(document.getElementById('filterModal')).hide()"
           >
             <!-- GRID -->
             <div class="row g-4">
@@ -173,14 +181,14 @@
                 <label class="form-label fw-semibold">Status</label>
                 <select name="status" class="form-select">
                    
-                  <option value="">Pending Review (Admin)</option>
-                  <option value="DRAFT">Pending Review (Station Partner)</option>
-                  <option value="ACTIVE">Approved</option>
-                  <option value="COMPLETED">Declined (Admin)</option>
-                  <option value="COMPLETED">Declined (Station Partner)</option>
-                  <option value="COMPLETED">Draft</option>
-                  <option value="COMPLETED">Insertion Order</option>
-                  <option value="COMPLETED">Contract Generated</option>
+                  <option value="Pending Review (Admin)">Pending Review (Admin)</option>
+                  <option value="Pending Review (Station Partner)">Pending Review (Station Partner)</option>
+                  <option value="Approved">Approved</option>
+                  <option value="Declined (Admin)">Declined (Admin)</option>
+                  <option value="Declined (Station Partner)">Declined (Station Partner)</option>
+                  <option value="Draft">Draft</option>
+                  <option value="Insertion Order">Insertion Order</option>
+                  <option value="Contract Generated">Contract Generated</option>
                 </select>
               </div>
               <!-- MARKET -->
@@ -189,7 +197,7 @@
                 <select name="market" class="form-select">
                   <option value="">All Market</option>
                   {% for m in markets %}
-                    <option value="{{ m.name }}">{{ m.name }}</option>
+                    <option value={{ m.name }}>{{ m.name }}</option>
                   {% endfor %}
                 </select>
               </div>
@@ -200,7 +208,7 @@
                 <select name="rep" class="form-select" >
                   <option value="">All Representative</option>
                   {% for rep in reps %}
-                    <option value="{{ rep.id }}">{{ rep.name }}</option>
+                    <option value="{{ rep.uuid }}">{{ rep.name }}</option>
                   {% endfor %}
                 </select>
               </div>
@@ -211,7 +219,7 @@
                 <select name="owner" class="form-select">
                   <option value="">All Owner</option>
                   {% for o in owners %}
-                    <option value="{{ o.id }}">{{ o.name }}</option>
+                    <option value="{{ o.name}}">{{ o.name }}</option>
                   {% endfor %}
                 </select>
               </div>
@@ -222,7 +230,7 @@
                 <select name="format" class="form-select">
                   <option value="">All Format</option>
                   {% for f in formats %}
-                    <option value="{{ f.id }}">{{ f.name }}</option>
+                    <option value="{{ f.uuid }}">{{ f.name }}</option>
                   {% endfor %}
                 </select>
               </div>
@@ -233,7 +241,7 @@
                 <select name="station" class="form-select">
                   <option value="">All Station Submitted</option>
                   {% for s in radio_stations %}
-                    <option value="{{ s.id }}">{{ s.name }}</option>
+                    <option value="{{ s.uuid }}">{{ s.name }}</option>
                   {% endfor %}
                 </select>
               </div>

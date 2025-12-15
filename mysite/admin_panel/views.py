@@ -13,6 +13,13 @@ from django.db.models import Q
 
 from admin_panel.models import RadioStation, Market, Format, Representative, User, Campaign, Schedule
 from django.core.paginator import Paginator
+from django_q.tasks import async_task
+from .tasks import (
+    process_campaign_statistics,
+    update_schedule_status,
+    send_campaign_notification,
+    bulk_update_radio_stations,
+)
 # Create your views here.
 
 @admin_required
@@ -319,13 +326,14 @@ def update_campaign(request, slug):
     
 
 def view_campaign(request,slug):
+    # async_task("math.sqrt", 9)
     campaign = get_object_or_404(Campaign, slug=slug)
-    reps = Representative.objects.all().values('name')
+    reps = Representative.objects.all().values('uuid','name')
     # markets = get_object_or_404(Market.objects.all().values('name'))
     schedules = campaign.schedules.all().order_by('-created_at')
-    owners =  User.objects.all().values('name')
-    formats = Format.objects.all().values('name')
-    radio_stations =RadioStation.objects.all().values('name')
+    owners =  User.objects.all().values('id','name')
+    formats = Format.objects.all().values('uuid','name')
+    radio_stations =RadioStation.objects.all().values('uuid','name')
     pprint(list(schedules.values()))
     search_query = request.GET.get('search', '').strip()
 
@@ -334,6 +342,83 @@ def view_campaign(request,slug):
             Q(name__icontains=search_query) |
             Q(schedule_status__icontains=search_query)
         )
+
+
+     # ------------------------------------
+    # APPLY FILTERS
+    # ------------------------------------
+    GET = request.GET
+
+    # Search filter
+    search_query = GET.get('search', '').strip()
+    if search_query:
+        schedules = schedules.filter(
+            Q(name__icontains=search_query) |
+            Q(schedule_status__icontains=search_query)
+        )
+
+    # Status filter
+    status = GET.get('status')
+    if status:
+        schedules = schedules.filter(schedule_status=status)
+
+    # Market filter
+    market = GET.get('market')
+    if market:
+        schedules = schedules.filter(target_radio_station__market__name=market)
+    # Representative filter
+    rep = GET.get('rep')
+    if rep:
+        schedules = schedules.filter(target_radio_station__rep__uuid=rep)
+
+    # Owner filter
+    owner = GET.get('owner')
+    if owner:
+        schedules = schedules.filter(target_radio_station__assign_user__name=owner)
+
+    # Format filter
+    format_uuid = GET.get('format')
+    if format_uuid:
+        schedules = schedules.filter(target_radio_station__format__uuid=format_uuid)
+
+    # Radio station filter
+    station_uuid = GET.get('station')
+    if station_uuid:
+        schedules = schedules.filter(target_radio_station__uuid=station_uuid)
+
+    # Early Payment Discount
+    epd = GET.get('epd')
+    if epd == "yes":
+        schedules = schedules.filter(early_payment_discount=True)
+    elif epd == "no":
+        schedules = schedules.filter(early_payment_discount=False)
+
+    # Amount range filter
+    amount_from = GET.get('amount_from')
+    amount_to = GET.get('amount_to')
+
+    if amount_from:
+        schedules = schedules.filter(total_amount__gte=amount_from)
+    if amount_to:
+        schedules = schedules.filter(total_amount__lte=amount_to)
+
+    # AQH range filter
+    aqh_from = GET.get('aqh_from')
+    aqh_to = GET.get('aqh_to')
+
+    if aqh_from:
+        schedules = schedules.filter(total_aqh__gte=aqh_from)
+    if aqh_to:
+        schedules = schedules.filter(total_aqh__lte=aqh_to)
+
+    # CPM range filter
+    cpm_from = GET.get('cpm_from')
+    cpm_to = GET.get('cpm_to')
+
+    if cpm_from:
+        schedules = schedules.filter(total_cpm__gte=cpm_from)
+    if cpm_to:
+        schedules = schedules.filter(total_cpm__lte=cpm_to)
 
       # Pagination
     page_number = request.GET.get('page', 1)
@@ -354,4 +439,18 @@ def view_campaign(request,slug):
        return render(request, 'admin_panel/layout/campaigns/view_campaign_partial.html', context)
 
     return render(request, 'admin_panel/layout/campaigns/view_campaign.html', context)
-    
+
+
+
+from django_q.tasks import async_task
+
+def notify_all(request, campaign_id):
+    async_task(
+        'admin_panel.tasks.update_schedule_status',   # full import path
+        campaign_id,
+        'Pending Review (Station Partner)'          # optional argument
+    )
+
+    return JsonResponse({
+        "message": "Task has been queued and will run in background."
+    })    

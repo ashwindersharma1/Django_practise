@@ -1,0 +1,14 @@
+[INFO] 2025-12-10 15:59:10,061 django-q: Enqueued [mysite_queue] 41
+[INFO] 2025-12-10 15:59:10,063 django.server: "GET /admin/notifyall/d5001516-ca87-11f0-98c6-109819d03808 HTTP/1.1" 200 63
+[INFO] 2025-12-10 15:59:10,063 django.server: "GET /admin/notifyall/d5001516-ca87-11f0-98c6-109819d03808 HTTP/1.1" 200 63
+[INFO] 2025-12-10 15:59:34,861 django-q: Process-8f1f1cc4bda745bb9b4aab14d5d50756 ready for work at 27460
+[INFO] 2025-12-10 15:59:34,902 django-q: Process-4bddbece006d48f196c5054cb2e9e8fd monitoring at 29684
+[INFO] 2025-12-10 15:59:34,911 django-q: Process-d15ac7f0afe9402f944a2b1fa92078f7 pushing tasks at 5340
+[INFO] 2025-12-10 15:59:46,428 django-q: Enqueued [mysite_queue] 42
+[INFO] 2025-12-10 15:59:46,429 django.server: "GET /admin/notifyall/d5001516-ca87-11f0-98c6-109819d03808 HTTP/1.1" 200 63
+[INFO] 2025-12-10 15:59:46,429 django.server: "GET /admin/notifyall/d5001516-ca87-11f0-98c6-109819d03808 HTTP/1.1" 200 63
+[INFO] 2025-12-10 15:59:46,435 django-q: Process-8f1f1cc4bda745bb9b4aab14d5d50756 processing cold-south-alabama-seventeen 'admin_panel.tasks.update_schedule_status'
+[INFO] 2025-12-10 15:59:46,458 admin_panel.tasks: Schedule 'Test Schedule1
+': Skipped (Current status: Pending Review (Station Partner))
+[INFO] 2025-12-10 15:59:46,459 admin_panel.tasks: Campaign 'Test Campaign 4' status update task finished.
+[INFO] 2025-12-10 15:59:46,479 django-q: Processed 'admin_panel.tasks.update_schedule_status' (cold-south-alabama-seventeen)

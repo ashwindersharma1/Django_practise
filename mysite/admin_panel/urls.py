@@ -12,6 +12,7 @@ urlpatterns = [
     path('campaign/edit/<slug:slug>/', views.edit_campaign, name='edit_campaign'),
     path('update-campaign/<slug:slug>', views.update_campaign, name='update_campaign'),
     path('campaign/<slug:slug>', views.view_campaign, name='view_campaign'),
+    path('notifyall/<uuid:campaign_id>', views.notify_all, name='notify_all'),
     # path('campaigns/edit/', views.edit_campaign, name='edit_campaign'),
     
 ]
