@@ -12,3 +12,85 @@
 ': Skipped (Current status: Pending Review (Station Partner))
 [INFO] 2025-12-10 15:59:46,459 admin_panel.tasks: Campaign 'Test Campaign 4' status update task finished.
 [INFO] 2025-12-10 15:59:46,479 django-q: Processed 'admin_panel.tasks.update_schedule_status' (cold-south-alabama-seventeen)
+[INFO] 2025-12-15 11:47:04,092 django.server: "GET /admin/radio_stations/ HTTP/1.1" 200 39175
+[INFO] 2025-12-15 11:47:04,092 django.server: "GET /admin/radio_stations/ HTTP/1.1" 200 39175
+[INFO] 2025-12-15 11:47:04,172 django.server: "GET /static/admin_panel/css/styles.css HTTP/1.1" 304 0
+[INFO] 2025-12-15 11:47:04,172 django.server: "GET /static/admin_panel/css/styles.css HTTP/1.1" 304 0
+[WARNING] 2025-12-15 11:47:04,193 django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[WARNING] 2025-12-15 11:47:04,193 django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[WARNING] 2025-12-15 11:47:04,200 django.server: "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 3334
+[WARNING] 2025-12-15 11:47:04,200 django.server: "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 3334
+[INFO] 2025-12-15 11:47:06,270 django.server: "GET /admin/station/radio-waves HTTP/1.1" 200 15336
+[INFO] 2025-12-15 11:47:06,270 django.server: "GET /admin/station/radio-waves HTTP/1.1" 200 15336
+[WARNING] 2025-12-15 11:47:06,331 django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[WARNING] 2025-12-15 11:47:06,331 django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[WARNING] 2025-12-15 11:47:06,336 django.server: "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 3334
+[WARNING] 2025-12-15 11:47:06,336 django.server: "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 3334
+[WARNING] 2025-12-15 11:47:08,187 django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[WARNING] 2025-12-15 11:47:08,187 django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[WARNING] 2025-12-15 11:47:08,190 django.server: "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 3334
+[WARNING] 2025-12-15 11:47:08,190 django.server: "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 3334
+[WARNING] 2025-12-15 11:47:08,229 django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[WARNING] 2025-12-15 11:47:08,229 django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[WARNING] 2025-12-15 11:47:08,245 django.server: "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 3334
+[WARNING] 2025-12-15 11:47:08,245 django.server: "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 3334
+[INFO] 2025-12-15 12:02:53,720 django.server: "GET /admin/radio_stations/ HTTP/1.1" 200 39175
+[INFO] 2025-12-15 12:02:53,720 django.server: "GET /admin/radio_stations/ HTTP/1.1" 200 39175
+[WARNING] 2025-12-15 12:02:53,777 django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[WARNING] 2025-12-15 12:02:53,777 django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[WARNING] 2025-12-15 12:02:53,779 django.server: "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 3334
+[WARNING] 2025-12-15 12:02:53,779 django.server: "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 3334
+[INFO] 2025-12-15 12:54:43,450 django.server: "GET /admin/radio_stations/?page=2&q=&status= HTTP/1.1" 200 35863
+[INFO] 2025-12-15 12:54:43,450 django.server: "GET /admin/radio_stations/?page=2&q=&status= HTTP/1.1" 200 35863
+[INFO] 2025-12-15 12:54:47,406 django.server: "GET /admin/radio_stations/ HTTP/1.1" 200 39175
+[INFO] 2025-12-15 12:54:47,406 django.server: "GET /admin/radio_stations/ HTTP/1.1" 200 39175
+[WARNING] 2025-12-15 12:54:47,453 django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[WARNING] 2025-12-15 12:54:47,453 django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[WARNING] 2025-12-15 12:54:47,455 django.server: "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 3334
+[WARNING] 2025-12-15 12:54:47,455 django.server: "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 3334
+[INFO] 2025-12-15 12:54:48,046 django.server: "GET /admin/campaigns/ HTTP/1.1" 200 17257
+[INFO] 2025-12-15 12:54:48,046 django.server: "GET /admin/campaigns/ HTTP/1.1" 200 17257
+[WARNING] 2025-12-15 12:54:48,103 django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[WARNING] 2025-12-15 12:54:48,103 django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[WARNING] 2025-12-15 12:54:48,105 django.server: "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 3334
+[WARNING] 2025-12-15 12:54:48,105 django.server: "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 3334
+[INFO] 2025-12-15 12:54:53,429 django.server: "GET /admin/campaign/campaign_1 HTTP/1.1" 200 18661
+[INFO] 2025-12-15 12:54:53,429 django.server: "GET /admin/campaign/campaign_1 HTTP/1.1" 200 18661
+[WARNING] 2025-12-15 12:54:53,478 django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[WARNING] 2025-12-15 12:54:53,478 django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[INFO] 2025-12-15 12:54:53,479 django.server: "GET /static/admin_panel/icons/filter.svg HTTP/1.1" 304 0
+[WARNING] 2025-12-15 12:54:53,480 django.server: "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 3334
+[INFO] 2025-12-15 12:54:53,479 django.server: "GET /static/admin_panel/icons/filter.svg HTTP/1.1" 304 0
+[WARNING] 2025-12-15 12:54:53,480 django.server: "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 3334
+[INFO] 2025-12-15 12:54:53,524 django.server: "GET /admin/campaign/campaign_1?page=1 HTTP/1.1" 200 359
+[INFO] 2025-12-15 12:54:53,524 django.server: "GET /admin/campaign/campaign_1?page=1 HTTP/1.1" 200 359
+[INFO] 2025-12-15 12:54:56,727 django.server: "GET /admin/campaigns/ HTTP/1.1" 200 17257
+[INFO] 2025-12-15 12:54:56,727 django.server: "GET /admin/campaigns/ HTTP/1.1" 200 17257
+[WARNING] 2025-12-15 12:54:56,764 django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[WARNING] 2025-12-15 12:54:56,764 django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[WARNING] 2025-12-15 12:54:56,766 django.server: "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 3334
+[WARNING] 2025-12-15 12:54:56,766 django.server: "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 3334
+[INFO] 2025-12-15 12:54:57,863 django.server: "GET /admin/campaign/edit/campaign_1/ HTTP/1.1" 200 9084
+[INFO] 2025-12-15 12:54:57,863 django.server: "GET /admin/campaign/edit/campaign_1/ HTTP/1.1" 200 9084
+[WARNING] 2025-12-15 12:54:57,918 django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[WARNING] 2025-12-15 12:54:57,918 django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[WARNING] 2025-12-15 12:54:57,920 django.server: "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 3334
+[WARNING] 2025-12-15 12:54:57,920 django.server: "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 3334
+[INFO] 2025-12-15 12:55:02,915 django.server: "GET /admin/campaigns/ HTTP/1.1" 200 17257
+[INFO] 2025-12-15 12:55:02,915 django.server: "GET /admin/campaigns/ HTTP/1.1" 200 17257
+[WARNING] 2025-12-15 12:55:02,958 django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[WARNING] 2025-12-15 12:55:02,958 django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[WARNING] 2025-12-15 12:55:02,960 django.server: "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 3334
+[WARNING] 2025-12-15 12:55:02,960 django.server: "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 3334
+[INFO] 2025-12-15 12:55:12,916 django.server: "GET /admin/campaign/edit/test_campaign/ HTTP/1.1" 200 9090
+[INFO] 2025-12-15 12:55:12,916 django.server: "GET /admin/campaign/edit/test_campaign/ HTTP/1.1" 200 9090
+[WARNING] 2025-12-15 12:55:12,967 django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[WARNING] 2025-12-15 12:55:12,967 django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[WARNING] 2025-12-15 12:55:12,970 django.server: "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 3334
+[WARNING] 2025-12-15 12:55:12,970 django.server: "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 3334
+[INFO] 2025-12-15 12:56:05,919 django.server: "GET /admin/campaigns/ HTTP/1.1" 200 17257
+[INFO] 2025-12-15 12:56:05,919 django.server: "GET /admin/campaigns/ HTTP/1.1" 200 17257
+[WARNING] 2025-12-15 12:56:05,969 django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[WARNING] 2025-12-15 12:56:05,969 django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[WARNING] 2025-12-15 12:56:05,971 django.server: "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 3334
+[WARNING] 2025-12-15 12:56:05,971 django.server: "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 3334
