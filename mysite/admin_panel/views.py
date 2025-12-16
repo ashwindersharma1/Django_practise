@@ -11,7 +11,7 @@ from django.db.models import Q
 
 # from django.db.models import Count
 
-from admin_panel.models import RadioStation, Market, Format, Representative, User, Campaign, Schedule
+from admin_panel.models import RadioStation, Market, Format, Representative, User, Campaign, Schedule,Product
 from django.core.paginator import Paginator
 from django_q.tasks import async_task
 from .tasks import (
@@ -451,6 +451,25 @@ def notify_all(request, campaign_id):
         'Pending Review (Station Partner)'          # optional argument
     )
 
-    return JsonResponse({
-        "message": "Task has been queued and will run in background."
+    response=  JsonResponse({
+        "Q-Task-message": "Task has been queued and will run in background."
     })    
+
+    response["HX-Trigger"] = "notifyAllSuccess"
+    return response
+
+def view_schedule(request, slug):
+    # schedule = get_object_or_404(Schedule, slug=slug)
+    schedule = get_object_or_404(
+    Schedule.objects.select_related('target_radio_station'),
+    slug=slug
+)
+    product= Product.objects.all()
+    
+    context={
+        'schedule': schedule,
+        'product': product,
+    }
+    pprint(list(context.values()))
+    # pprint(context)
+    return render(request, 'admin_panel/layout/schedules/view_schedules.html', context)

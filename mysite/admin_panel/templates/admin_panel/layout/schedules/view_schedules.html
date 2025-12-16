@@ -1,0 +1,112 @@
+{% extends "admin_panel/layout/base_dashboard.html" %}
+{% load static %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+  <!-- Header -->
+  <div class="d-flex align-items-center mb-3">
+    <a href="javascript:history.back()" class="btn btn-light me-3">←</a>
+    <div>
+      <h3 class="mb-0">View Schedule</h3>
+      <small class="text-muted">{{ schedule.name }}</small>
+    </div>
+
+    <div class="ms-auto">
+      <a href="#" class="btn btn-outline-primary">
+        <i class="bi bi-clock-history"></i> View History
+      </a>
+    </div>
+  </div>
+
+  <!-- Tags -->
+  <div class="mb-4">
+    <span class="badge bg-primary">Broadcast Weeks: {{ schedule.broadcast_weeks }}</span>
+    <span class="badge bg-info text-dark">
+      Flight Dates: {{ schedule.start_date }} - {{ schedule.end_date }}
+    </span>
+    <span class="badge bg-warning text-dark">
+      {{ schedule.status }}
+    </span>
+  </div>
+
+  <!-- Station -->
+  <div class="mb-4">
+    <label class="form-label fw-bold">Target Station *</label>
+    <select class="form-select" disabled>
+      <option>{{ schedule.station.name }}</option>
+    </select>
+  </div>
+
+  <!-- CPM -->
+  <div class="row mb-4">
+    <div class="col-md-6">
+      <label class="form-label">Goal CPM</label>
+      <input type="text" class="form-control" value="{{ schedule.goal_cpm }}" readonly>
+    </div>
+
+    <div class="col-md-6 text-end">
+      <h5 class="text-warning mt-4">
+        ${{ schedule.schedule_cpm|default:"0.00" }}
+      </h5>
+      <small class="text-muted">Schedule CPM</small>
+    </div>
+  </div>
+
+  <!-- EPD -->
+  <div class="alert alert-warning d-flex justify-content-between align-items-center">
+    <div>
+      <strong>Early Payment Discount (EPD)</strong><br>
+      <input type="radio" {% if schedule.epd %}checked{% endif %} disabled> Yes
+      <input type="radio" {% if not schedule.epd %}checked{% endif %} disabled> No
+    </div>
+    <div class="fw-bold text-success">
+      ${{ schedule.epd_cpm|default:"0.00" }}<br>
+      <small>EPD CPM</small>
+    </div>
+  </div>
+
+  <!-- PRODUCTS -->
+  <h5 class="mt-5">WKDAY <span class="badge bg-success">NOT INCLUDED</span></h5>
+
+  {% for product in products %}
+  <div class="card mb-3">
+    <div class="card-body">
+      <div class="row g-3">
+
+        <div class="col-md-3">
+          <label class="form-label">Daypart</label>
+          <input class="form-control" value="{{ product.daypart }}" readonly>
+        </div>
+
+        <div class="col-md-2">
+          <label class="form-label">Rate ($)</label>
+          <input class="form-control" value="{{ product.rate }}" readonly>
+        </div>
+
+        <div class="col-md-2">
+          <label class="form-label">Spots/Wk</label>
+          <input class="form-control" value="{{ product.spots_per_week }}" readonly>
+        </div>
+
+        <div class="col-md-2">
+          <label class="form-label">AQH</label>
+          <input class="form-control" value="{{ product.aqh }}" readonly>
+        </div>
+
+        <div class="col-md-3">
+          <label class="form-label">Length</label>
+          <input class="form-control" value="{{ product.length }}" readonly>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  {% empty %}
+    <p class="text-muted">No products added.</p>
+  {% endfor %}
+
+</div>
+
+{% endblock %}

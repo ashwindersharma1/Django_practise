@@ -14,5 +14,7 @@ urlpatterns = [
     path('campaign/<slug:slug>', views.view_campaign, name='view_campaign'),
     path('notifyall/<uuid:campaign_id>', views.notify_all, name='notify_all'),
     # path('campaigns/edit/', views.edit_campaign, name='edit_campaign'),
-    
+
+    #schedule
+    path('view-schedule/<slug:slug>',views.view_schedule, name="view_schedule"),    
 ]

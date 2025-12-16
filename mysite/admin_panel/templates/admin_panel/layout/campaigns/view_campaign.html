@@ -126,9 +126,6 @@
  
     </div>
 
-    <!-- <button class="btn btn-light border" onclick="notify_all()">
-        Notify All
-    </button> -->
     <button
     class="btn btn-light border"
     hx-get="{% url 'notify_all' campaign.uuid %}"
@@ -136,6 +133,15 @@
     hx-swap="none" >
     Notify All
 </button>
+
+<!-- <button
+    class="btn btn-light border"
+    hx-get="{% url 'notify_all' campaign.uuid %}"
+    hx-trigger="click"
+    hx-swap="none">
+    Notify All -->
+<!-- </button> -->
+
 </div>
 
 
@@ -307,6 +313,27 @@
     </div>
   </div>
   
+  <!-- Toast -->
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+  <div id="notifyToast" class="toast align-items-center text-bg-success border-0" role="alert">
+    <div class="d-flex">
+      <div class="toast-body">
+        Notification queued successfully 🚀
+      </div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+    </div>
+  </div>
+</div>
+
+
+<script>
+  document.body.addEventListener("notifyAllSuccess", function () {
+      const toastEl = document.getElementById('notifyToast');
+      const toast = new bootstrap.Toast(toastEl, { delay: 3000 });
+      toast.show();
+  });
+</script>
+
 
 <script src="https://unpkg.com/htmx.org@1.9.2"></script>
 

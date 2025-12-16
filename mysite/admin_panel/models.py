@@ -177,6 +177,7 @@ class Schedule(models.Model):
     epd_cpm = models.FloatField(null=True, blank=True)
     user_draft = models.JSONField(null=True, blank=True)
     additional_day_specific = models.BooleanField(default=False)
+    slug = models.SlugField(unique=True)
 
     class Meta:
         db_table = "schedules"
@@ -202,3 +203,30 @@ class CampaignSchedule(models.Model):
     class Meta:
         db_table = 'campaign_schedules'
         unique_together = ('campaign', 'schedule')
+
+
+
+class Product(models.Model):
+    uuid = models.UUIDField(
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False
+    )
+    slug=models.SlugField(unique=True)
+    product_name = models.TextField()
+    day_specific = models.BooleanField(null=True, blank=True)
+    length = models.IntegerField(null=True, blank=True)
+    historical_rate = models.IntegerField(null=True, blank=True)
+    rate = models.IntegerField(null=True, blank=True)
+    aqh = models.IntegerField(null=True, blank=True)
+    sort_order = models.IntegerField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = "products"
+        verbose_name = "Product"
+        verbose_name_plural = "Products"
+
+    def __str__(self):
+        return self.product_name
