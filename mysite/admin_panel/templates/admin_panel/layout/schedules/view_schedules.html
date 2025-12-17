@@ -27,7 +27,7 @@
       Flight Dates: {{ schedule.start_date }} - {{ schedule.end_date }}
     </span>
     <span class="badge bg-warning text-dark">
-      {{ schedule.status }}
+      {{ schedule.schedule_status }}
     </span>
   </div>
 
@@ -35,7 +35,7 @@
   <div class="mb-4">
     <label class="form-label fw-bold">Target Station *</label>
     <select class="form-select" disabled>
-      <option>{{ schedule.station.name }}</option>
+      <option>{{ schedule.target_radio_station}}</option>
     </select>
   </div>
 
@@ -68,15 +68,15 @@
   </div>
 
   <!-- PRODUCTS -->
-  <h5 class="mt-5">WKDAY <span class="badge bg-success">NOT INCLUDED</span></h5>
+  <!-- <h5 class="mt-5">WKDAY <span class="badge bg-success">NOT INCLUDED</span></h5> -->
 
-  {% for product in products %}
+  {% for product in product %}
   <div class="card mb-3">
     <div class="card-body">
       <div class="row g-3">
 
         <div class="col-md-3">
-          <label class="form-label">Daypart</label>
+          <label class="form-label">{{product.product_name}}</label>
           <input class="form-control" value="{{ product.daypart }}" readonly>
         </div>
 

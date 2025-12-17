@@ -230,3 +230,39 @@ class Product(models.Model):
 
     def __str__(self):
         return self.product_name
+
+
+import uuid
+from django.db import models
+
+
+class ProductDayPart(models.Model):
+    uuid = models.UUIDField(
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False
+    )
+
+    product = models.ForeignKey(
+        'Product',                     # or 'products.Product' if app name differs
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        db_column='product_id',
+        related_name='day_parts'
+    )
+
+    daypart = models.TextField()
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = 'product_day_parts'
+        indexes = [
+            models.Index(fields=['product'], name='idx_product_day_parts_product_id'),
+            models.Index(fields=['daypart'], name='product_day_parts_daypart_idx'),
+        ]
+
+    def __str__(self):
+        return f"{self.daypart} ({self.product_id})"

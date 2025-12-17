@@ -458,6 +458,8 @@ def notify_all(request, campaign_id):
     response["HX-Trigger"] = "notifyAllSuccess"
     return response
 
+from django.forms.models import model_to_dict
+
 def view_schedule(request, slug):
     # schedule = get_object_or_404(Schedule, slug=slug)
     schedule = get_object_or_404(
@@ -465,7 +467,9 @@ def view_schedule(request, slug):
     slug=slug
 )
     product= Product.objects.all()
-    
+    print(list(product))
+    # print(model_to_dict(product))
+
     context={
         'schedule': schedule,
         'product': product,

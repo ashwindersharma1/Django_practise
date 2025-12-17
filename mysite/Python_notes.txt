@@ -58,4 +58,6 @@ remove the cache files from the git  that are tracked by the git
     git rm -r --cached mysite/__pycache__
 
 
+    Queues running 
     
+    python manage.py qcluster
